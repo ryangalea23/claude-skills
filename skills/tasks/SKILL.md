@@ -2,7 +2,7 @@
 name: tasks
 description: |
   Personal task list. Add, list, complete, search, and tag tasks. Storage is a single
-  markdown file at ~/.claude/skills/tasks/tasks.md (the source of truth — read it before
+  markdown file at ~/.claude/skills/tasks/tasks.md (the source of truth - read it before
   every operation). Tags use #word format (people: #alex, contexts: #1on1, projects:
   #acme-corp). Priority: !high / !med / !low. Due dates: due:YYYY-MM-DD.
   Use when asked to "add task", "add to my list", "remind me to", "what's on my list",
@@ -18,7 +18,7 @@ allowed-tools:
 
 # Tasks
 
-Personal task list. Single markdown file at `~/.claude/skills/tasks/tasks.md`. **Read it before every operation** — it's the source of truth and the user can edit it directly outside of /tasks calls.
+Personal task list. Single markdown file at `~/.claude/skills/tasks/tasks.md`. **Read it before every operation** - it's the source of truth and the user can edit it directly outside of /tasks calls.
 
 ## File format
 
@@ -37,12 +37,12 @@ Personal task list. Single markdown file at `~/.claude/skills/tasks/tasks.md`. *
 ```
 
 **Conventions:**
-- `#word` — tag (people: `#alex` `#sam`; contexts: `#1on1` `#board` `#product`; projects: `#acme-corp`)
-- `!high` `!med` `!low` — priority (omit for normal)
-- `due:YYYY-MM-DD` — due date (always absolute, never "Friday")
-- **`created:YYYY-MM-DD` — creation date. Required on every new task.** Used for drift detection.
-- **`repeat:Nd` — recurring task.** When completed, re-spawn in Open with `due:<completion+N>` and `created:<today>`. Use `7d` for weekly, `14d` biweekly, `30d` monthly-ish, `90d` quarterly. Useful for project check-ins ("Check in on the launch repeat:7d").
-- `(from email msg:<id>)` — link back to an email thread when the task was captured during an email-triage workflow, if you have one
+- `#word` - tag (people: `#alex` `#sam`; contexts: `#1on1` `#board` `#product`; projects: `#acme-corp`)
+- `!high` `!med` `!low` - priority (omit for normal)
+- `due:YYYY-MM-DD` - due date (always absolute, never "Friday")
+- **`created:YYYY-MM-DD` - creation date. Required on every new task.** Used for drift detection.
+- **`repeat:Nd` - recurring task.** When completed, re-spawn in Open with `due:<completion+N>` and `created:<today>`. Use `7d` for weekly, `14d` biweekly, `30d` monthly-ish, `90d` quarterly. Useful for project check-ins ("Check in on the launch repeat:7d").
+- `(from email msg:<id>)` - link back to an email thread when the task was captured during an email-triage workflow, if you have one
 - Tags, priority, dates, repeat can appear anywhere in the line; the body text is everything else
 - Done items are prefixed with `(YYYY-MM-DD)` showing completion date
 
@@ -68,7 +68,7 @@ If the file is empty or doesn't exist, create it with the template structure abo
 Triggered by: "add task", "add to my list", "remind me to", "I need to", "follow up with", "don't let me forget", or `/tasks add <text>`.
 
 1. Parse the input for body text + any inline tags / priority / due date.
-2. If the user mentions a person but doesn't tag them, ASK before adding ("Tag this for #sam?") — don't auto-tag based on guessing.
+2. If the user mentions a person but doesn't tag them, ASK before adding ("Tag this for #sam?") - don't auto-tag based on guessing.
 3. **If no due date is provided, always ask: "When is this due or when do you want to be reminded?"** Convert relative answers ("Friday", "next week") to absolute dates (`due:YYYY-MM-DD`) before saving. Today's date is in the system context. Only skip this if the task is clearly open-ended with no natural deadline (e.g. a standing reminder or recurring cadence task).
 4. **Always append `created:<today's-date>`** in YYYY-MM-DD format. This is required for drift detection.
 5. Append to the Open section using the `Edit` tool. Don't mess with order; new tasks go at the bottom of Open.
@@ -101,11 +101,11 @@ This step needs a calendar tool wired up (an MCP server or similar that can list
 3. Read tasks.md.
 4. For each meeting in chronological order, list any Open tasks where ANY tag matches the candidate person tags. Format:
    ```
-   9:00 AM — Sam 1:1
+   9:00 AM - Sam 1:1
      1. discuss onboarding timeline
      2. roadmap follow-up after the offsite
 
-   2:00 PM — Team sync (Taylor, Jordan)
+   2:00 PM - Team sync (Taylor, Jordan)
      - no tagged tasks
    ```
 5. If a meeting has no matching tasks, say so plainly (don't pad).
@@ -118,7 +118,7 @@ If the user asks about a specific upcoming meeting (not today), expand the time 
 Triggered by: "what's on my list for sam", "tasks for #alex", "1:1 with sam what should I bring up", `/tasks for <tag>`.
 
 1. Read the file.
-2. Match Open tasks where ANY of the user-mentioned tags appear (OR semantics for single mentioned tag, AND for multi-tag like "for sam at 1:1" — match `#sam` AND `#1on1`).
+2. Match Open tasks where ANY of the user-mentioned tags appear (OR semantics for single mentioned tag, AND for multi-tag like "for sam at 1:1" - match `#sam` AND `#1on1`).
 3. Number the matches as a fresh list. If empty, say so.
 4. End with: *"Anything to add for [person/context]?"*
 
@@ -150,15 +150,15 @@ Triggered by: "show recurring", "what's on repeat", "audit my check-ins", "what 
    RECURRING CHECK-INS (N)
 
    Weekly (3)
-   1. Check in on the launch with Sam #acme-corp #sam — next: 2026-05-09
-   2. Pipeline review with sales team #pipeline — next: 2026-05-09
-   3. EA sync #ea — next: 2026-05-09
+   1. Check in on the launch with Sam #acme-corp #sam - next: 2026-05-09
+   2. Pipeline review with sales team #pipeline - next: 2026-05-09
+   3. EA sync #ea - next: 2026-05-09
 
    Monthly (1)
-   4. NPS review #customer-success — next: 2026-06-02
+   4. NPS review #customer-success - next: 2026-06-02
 
    Quarterly (1)
-   5. Q3 board prep #board — next: 2026-08-01
+   5. Q3 board prep #board - next: 2026-08-01
    ```
 5. End with: *"Anything to add, remove, or change cadence?"*
 
@@ -180,7 +180,7 @@ Read, locate by number, Edit the line in place. Confirm.
 
 Triggered by: "remove task 2", "I don't need to do task 5 anymore", "drop task 3".
 
-Locate by number. Use Edit to remove the line entirely (don't move to Done — Done is for completed work). Confirm: *"Removed: [body]"*.
+Locate by number. Use Edit to remove the line entirely (don't move to Done - Done is for completed work). Confirm: *"Removed: [body]"*.
 
 ## Tag conventions (recommended, not enforced)
 
@@ -190,7 +190,7 @@ Pick up whatever the user uses; suggest these patterns when it helps:
 - **Contexts**: `#1on1`, `#board`, `#fundraising`, `#product`, `#hiring`, `#legal`
 - **Projects**: whatever the user's own project shorthand is (`#acme-corp`, `#mobileapp`)
 
-When the user adds a task and mentions a person, suggest tagging if not done. When they have many tasks for one person, that's probably a 1:1 list — the next agent run could surface those before that meeting (future enhancement).
+When the user adds a task and mentions a person, suggest tagging if not done. When they have many tasks for one person, that's probably a 1:1 list - the next agent run could surface those before that meeting (future enhancement).
 
 ## When to ASK vs DECIDE
 
@@ -210,6 +210,6 @@ When listing tasks tagged with email context, you can offer: *"Want me to pull t
 ## What this skill does NOT do
 
 - No reminders / time-based notifications (pair with a scheduler skill for daily/weekly digests, if you have one)
-- No external sync (Linear, Todoist, etc.) — markdown only
-- No mobile capture — tasks have to be added via Claude Code session (or the user directly editing the file)
-- No automatic prioritization — the user owns priority assignment
+- No external sync (Linear, Todoist, etc.) - markdown only
+- No mobile capture - tasks have to be added via Claude Code session (or the user directly editing the file)
+- No automatic prioritization - the user owns priority assignment

@@ -10,10 +10,10 @@ allowed-tools:
 
 ## Overview
 
-Most "sign and return" PDFs aren't true Docusign envelopes — they're flat PDFs with a "Signature:" line, or proper AcroForm PDFs with fillable signature fields. This skill stamps a transparent PNG of the user's signature at the right spot, optionally adds today's date, and saves a signed copy. The output is a normal PDF that can be attached to a reply email.
+Most "sign and return" PDFs aren't true Docusign envelopes - they're flat PDFs with a "Signature:" line, or proper AcroForm PDFs with fillable signature fields. This skill stamps a transparent PNG of the user's signature at the right spot, optionally adds today's date, and saves a signed copy. The output is a normal PDF that can be attached to a reply email.
 
 **Tool:** `scripts/sign_pdf.py` (PyMuPDF-based)
-**Signature image:** you provide this — see Setup below. Never use a placeholder or a signature that isn't the actual user's.
+**Signature image:** you provide this - see Setup below. Never use a placeholder or a signature that isn't the actual user's.
 
 ## Setup
 
@@ -24,7 +24,7 @@ Before first use:
    ```bash
    python scripts/prep_signature.py "/path/to/signature-source.jpg" "/path/to/signature.png"
    ```
-   Tune `--threshold` (default 230, range 0-255) if the result loses ink or keeps paper texture — lower is more aggressive at removing near-white pixels.
+   Tune `--threshold` (default 230, range 0-255) if the result loses ink or keeps paper texture - lower is more aggressive at removing near-white pixels.
 3. Tell `sign_pdf.py` where that PNG lives, either by passing `--signature /path/to/signature.png` on every command, or by setting the environment variable `SIGNATURE_IMAGE` so you don't have to repeat it.
 4. Keep the signature PNG out of source control and treat it like a sensitive file (see Signature Asset Hygiene below).
 
@@ -37,7 +37,7 @@ Before first use:
 **Don't use for:**
 - Docs marked "must be wet-signed" or with notary blocks (legally insufficient)
 - Real-estate closings, banking power-of-attorney, anything requiring witnessing
-- True Docusign envelopes — those should go through Docusign's UI for the audit trail
+- True Docusign envelopes - those should go through Docusign's UI for the audit trail
 
 ## Legal Note (ESIGN Act, US)
 
@@ -51,11 +51,11 @@ Image-stamp signatures on flat PDFs are binding for normal commercial contracts 
 inspect -> preview (optional) -> stamp OR auto
 ```
 
-1. **`inspect`** — print page count, dimensions, AcroForm fields, and "Signature:"/"By:" labels detected by text search. Always start here.
-2. **`auto`** — try AcroForm signature fields first; fall back to stamping near label text. Works on the majority of well-built PDFs, not all.
-3. **`preview`** — render a page as PNG so you can eyeball the layout and pick (x,y) coordinates manually.
-4. **`stamp`** — place signature image at explicit `--page --x --y --width` (PDF points, 72 per inch, top-left origin).
-5. **`text`** — stamp plain text (printed name, title, date) at explicit `--page --x --y --size`. The y is the text baseline. Use this to fill the rows below the signature line.
+1. **`inspect`** - print page count, dimensions, AcroForm fields, and "Signature:"/"By:" labels detected by text search. Always start here.
+2. **`auto`** - try AcroForm signature fields first; fall back to stamping near label text. Works on the majority of well-built PDFs, not all.
+3. **`preview`** - render a page as PNG so you can eyeball the layout and pick (x,y) coordinates manually.
+4. **`stamp`** - place signature image at explicit `--page --x --y --width` (PDF points, 72 per inch, top-left origin).
+5. **`text`** - stamp plain text (printed name, title, date) at explicit `--page --x --y --size`. The y is the text baseline. Use this to fill the rows below the signature line.
 
 ## Quick Reference
 
@@ -63,7 +63,7 @@ inspect -> preview (optional) -> stamp OR auto
 # Inspect
 python scripts/sign_pdf.py inspect "/path/to/contract.pdf"
 
-# Auto (try first — fastest path)
+# Auto (try first - fastest path)
 python scripts/sign_pdf.py auto "/path/to/contract.pdf" --signature "/path/to/signature.png"
 
 # Preview a page to pick coordinates
@@ -107,11 +107,11 @@ Manual: preview each candidate page, pick coords, stamp explicitly
 
 | Mistake | Fix |
 |---|---|
-| Renaming the signed PDF with a date/recipient prefix | Preserve the original filename — only append `-signed`. Recipients recognize docs by original name; renaming confuses them. |
+| Renaming the signed PDF with a date/recipient prefix | Preserve the original filename - only append `-signed`. Recipients recognize docs by original name; renaming confuses them. |
 | Skipping inspect, stamping blind | Always inspect first; coordinates differ per PDF. |
-| Guessing text field y-coordinates | Extract the existing signer's filled values via `page.get_text('dict')` and mirror those exact y positions. Don't estimate — use the PDF's own data. |
+| Guessing text field y-coordinates | Extract the existing signer's filled values via `page.get_text('dict')` and mirror those exact y positions. Don't estimate - use the PDF's own data. |
 | Placing text values below their label | Values go ABOVE the label/rule that identifies the field (traditional form convention). Use the other party's filled positions as the reference. |
-| Putting the signer's name twice | Name goes only in the Printed Name field. The signature image alone occupies the Signature area — no typed name there unless the other party did the same. |
+| Putting the signer's name twice | Name goes only in the Printed Name field. The signature image alone occupies the Signature area - no typed name there unless the other party did the same. |
 | Using an 11pt font when form labels are 9pt | Match the form's font size (check `span['size']` in text extraction). Mismatched size looks off. |
 | Using stamp width too small (<100) | Signature looks tiny. Default 150 pts (~2 inches) is right. |
 | Not adding `--date` when the doc has a date line | Reader expects ISO date or "MM/DD/YYYY" near sig. Use `--date`. |
@@ -120,13 +120,13 @@ Manual: preview each candidate page, pick coords, stamp explicitly
 
 ## Signature Asset Hygiene
 
-- Keep the source photo/scan and the transparent working PNG out of source control (`.gitignore` should cover them — see this repo's own `.gitignore` as an example, but if you install this skill inside your own project, make sure your `.gitignore` there also excludes it).
+- Keep the source photo/scan and the transparent working PNG out of source control (`.gitignore` should cover them - see this repo's own `.gitignore` as an example, but if you install this skill inside your own project, make sure your `.gitignore` there also excludes it).
 - If the machine holding the signature PNG is compromised, that PNG could be used to forge documents. Consider encrypting it at rest, or storing it in your OS's credential manager, if that risk matters to you.
 
 ## Limitations (current v1)
 
 - **Single signature per run** for `stamp` mode (auto can place multiple if multiple fields/labels found)
-- **No initials-per-page mode** — would need a `--initials` flag with corner placement
-- **No checkbox/text-field filling** — only signature image stamping
-- **No verification of signed output** — always open the signed PDF and visually confirm before sending
+- **No initials-per-page mode** - would need a `--initials` flag with corner placement
+- **No checkbox/text-field filling** - only signature image stamping
+- **No verification of signed output** - always open the signed PDF and visually confirm before sending
 - **Coordinate origin is top-left** in PyMuPDF, but some PDF tools use bottom-left. If a stamp lands in the wrong place, try `--y (page_height - y)`.

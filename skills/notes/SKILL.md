@@ -42,7 +42,7 @@ Personal notes. Three types, all stored as individual markdown files with requir
   date: 2026-05-02
   title: short human title
   tags: [#sam, #acme-corp]        # optional, lowercase #word
-  people: [sam, taylor]           # meeting notes only — short names, lowercase
+  people: [sam, taylor]           # meeting notes only - short names, lowercase
   source: email msg:<id> | conversation | link:<url> | null
   ---
   ```
@@ -73,9 +73,9 @@ Parse the trigger:
 1. If you have a calendar tool wired up (an MCP server that can list today's events), call it for today's events and present them as a numbered list with time + summary + attendees:
    ```
    Today's meetings:
-   1. 9:00 AM — 1:1 with Sam (Sam)
-   2. 11:00 AM — Acme Corp sync (Taylor, Jordan)
-   3. 2:00 PM — Team standup (Morgan, Casey)
+   1. 9:00 AM - 1:1 with Sam (Sam)
+   2. 11:00 AM - Acme Corp sync (Taylor, Jordan)
+   3. 2:00 PM - Team standup (Morgan, Casey)
 
    Which meeting is this for? (or 'none')
    ```
@@ -117,9 +117,9 @@ Triggered by: "find notes about X", "what did I write down about Y", "search my 
 3. Present numbered:
    ```
    Hits (5):
-   1. ~/work/notes/2026-05-02_fact_supabase-rls.md — "RLS policies cascade through views..."
-   2. ~/work/notes/2026-04-28_meeting_1on1-with-sam.md — "discussed onboarding..."
-   3. ~/work/email/saved/2026-04-15_taylor_q3-numbers.md — (subject line)
+   1. ~/work/notes/2026-05-02_fact_supabase-rls.md - "RLS policies cascade through views..."
+   2. ~/work/notes/2026-04-28_meeting_1on1-with-sam.md - "discussed onboarding..."
+   3. ~/work/email/saved/2026-04-15_taylor_q3-numbers.md - (subject line)
    ...
    ```
 4. End with: *"Open a number to read it, or refine."*
@@ -149,26 +149,26 @@ Facts accumulate forever. This view groups them by tag for browsing.
 
 1. Glob `~/work/notes/*_fact_*.md`.
 2. For each, parse frontmatter `tags`.
-3. Group by tag. A fact with multiple tags appears under each (don't dedupe — browsing benefit > listing tidiness).
+3. Group by tag. A fact with multiple tags appears under each (don't dedupe - browsing benefit > listing tidiness).
 4. Format:
    ```
    FACTS (12 total)
 
    #postgres (3)
-   1. 2026-05-02 — RLS policies cascade through views
-   2. 2026-04-30 — Window functions can't reference aliases in the same SELECT
-   3. 2026-04-12 — pg_stat_statements needs preload
+   1. 2026-05-02 - RLS policies cascade through views
+   2. 2026-04-30 - Window functions can't reference aliases in the same SELECT
+   3. 2026-04-12 - pg_stat_statements needs preload
 
    #acme-corp (2)
-   4. 2026-04-28 — They use Salesforce, not HubSpot
-   5. 2026-03-15 — Decision-maker is the COO, not the CIO
+   4. 2026-04-28 - They use Salesforce, not HubSpot
+   5. 2026-03-15 - Decision-maker is the COO, not the CIO
 
    Untagged (1)
-   6. 2026-04-01 — ...
+   6. 2026-04-01 - ...
    ```
 5. End with: *"Open a number to read, or filter by tag."*
 
-If a fact has no tags, group under `Untagged` and surface count prominently — that's a flag the user should fix.
+If a fact has no tags, group under `Untagged` and surface count prominently - that's a flag the user should fix.
 
 ### 6. Open / read a note
 
@@ -191,7 +191,7 @@ Triggered by: "add to that note", "append:", "edit note 3".
 
 Triggered by: "delete note 3", "remove the X note".
 
-Confirm exact filename + first line. On verbatim approval, delete the file. Don't move to a trash folder — the user has git history if they need recovery.
+Confirm exact filename + first line. On verbatim approval, delete the file. Don't move to a trash folder - the user has git history if they need recovery.
 
 ## Email integration (optional)
 
@@ -212,9 +212,9 @@ This lets the user later `/notes find` and pull both the note and (via the `sour
 
 ## What this skill does NOT do
 
-- No automatic tagging based on guessing — the user's tags are the user's tags.
-- No external sync (Notion, Obsidian, etc.) — markdown files only.
-- No mobile capture — notes added via Claude Code session or by editing files directly.
-- No auto-summarization of long notes — store what the user wrote.
-- No reminders / time-based surfacing — pair with a scheduler skill for digests, if you have one.
-- No index file (`NOTES.md`) — pure filename + frontmatter + grep. Indexes drift.
+- No automatic tagging based on guessing - the user's tags are the user's tags.
+- No external sync (Notion, Obsidian, etc.) - markdown files only.
+- No mobile capture - notes added via Claude Code session or by editing files directly.
+- No auto-summarization of long notes - store what the user wrote.
+- No reminders / time-based surfacing - pair with a scheduler skill for digests, if you have one.
+- No index file (`NOTES.md`) - pure filename + frontmatter + grep. Indexes drift.

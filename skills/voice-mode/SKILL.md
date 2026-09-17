@@ -13,7 +13,7 @@ A Claude Code Stop hook can read each of Claude's responses aloud using `edge-tt
 
 **Privacy:** `edge-tts` is Microsoft's online text-to-speech service. While voice mode is on, the text of every Claude reply is sent over the network to Microsoft to be turned into audio. Leave it off in sessions where replies may contain secrets or anything you don't want leaving your machine.
 
-This skill does NOT install anything — it assumes the pieces below are already set up (see Setup below). It just flips the switch.
+This skill does NOT install anything - it assumes the pieces below are already set up (see Setup below). It just flips the switch.
 
 ## When to Use
 
@@ -22,8 +22,8 @@ This skill does NOT install anything — it assumes the pieces below are already
 **Disable** when the user says "turn off voice mode", "disable TTS", "stop talking", or "go back to text".
 
 **Don't use for:**
-- Installing/configuring TTS from scratch — see Setup below, but assume it's installed once you're using this skill day to day.
-- Adjusting voice quality/settings — change the `SPEAK_VOICE` environment variable instead (see table below).
+- Installing/configuring TTS from scratch - see Setup below, but assume it's installed once you're using this skill day to day.
+- Adjusting voice quality/settings - change the `SPEAK_VOICE` environment variable instead (see table below).
 
 ## Quick Reference
 
@@ -92,12 +92,12 @@ When TTS is active, Claude's responses get spoken aloud. Optimize for listening:
 | Mistake | Fix |
 |---|---|
 | Enabled mid-session, hook didn't fire | Hooks load at session start. Tell the user to restart Claude Code. |
-| Voice sounds wrong | Set the `SPEAK_VOICE` environment variable. Options include `en-US-AriaNeural` (default), `en-US-JennyNeural`, `en-US-GuyNeural`, `en-US-AndrewNeural` — any `edge-tts` voice name works. |
+| Voice sounds wrong | Set the `SPEAK_VOICE` environment variable. Options include `en-US-AriaNeural` (default), `en-US-JennyNeural`, `en-US-GuyNeural`, `en-US-AndrewNeural` - any `edge-tts` voice name works. |
 | Speech overlaps between turns | `stop-hook.py` kills any in-flight player before starting new speech; if it still overlaps, check that only one Stop hook instance is registered. |
 
 ## Setup (one time, not part of normal use)
 
-1. Install the Python packages: `pip install --user edge-tts`. `pip install --user pycaw` is optional — it lets the hook detect whether you're on a call or playing audio in another app and stay quiet if so; without it, TTS always speaks.
+1. Install the Python packages: `pip install --user edge-tts`. `pip install --user pycaw` is optional - it lets the hook detect whether you're on a call or playing audio in another app and stay quiet if so; without it, TTS always speaks.
 2. Make sure a media player is available for playback. The scripts default to `ffplay` (part of ffmpeg) via the `FFPLAY_PATH` environment variable (default `ffplay`, or set it to a full path like `C:\ffmpeg\bin\ffplay.exe` on Windows). Any command-line player that can take a file path works if you adjust `speak.py`'s `play()` function.
 3. Copy `scripts/speak.py` and `scripts/stop-hook.py` from this skill folder to wherever you keep Claude Code scripts.
 4. Register the Stop hook in your Claude Code `settings.json`:
@@ -114,4 +114,4 @@ When TTS is active, Claude's responses get spoken aloud. Optimize for listening:
 
 `edge-tts` was picked over paid TTS APIs because it's free and has no API key to manage. A Stop hook was picked over an MCP tool because it fires automatically after every response with zero extra typing. The marker-file toggle exists so you can mute Claude mid-session without touching `settings.json` or restarting.
 
-If you want TTS to also route through a specific playback device (for example, streaming your desktop's audio to a phone or another room), that's a platform-specific extension on top of this skill — this skill only covers turning speech on and off.
+If you want TTS to also route through a specific playback device (for example, streaming your desktop's audio to a phone or another room), that's a platform-specific extension on top of this skill - this skill only covers turning speech on and off.
