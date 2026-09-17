@@ -11,6 +11,8 @@ allowed-tools:
 
 A Claude Code Stop hook can read each of Claude's responses aloud using `edge-tts` (free, no API key). This skill toggles that on and off with a marker file, so you don't need to edit settings or restart anything just to mute it.
 
+**Privacy:** `edge-tts` is Microsoft's online text-to-speech service. While voice mode is on, the text of every Claude reply is sent over the network to Microsoft to be turned into audio. Leave it off in sessions where replies may contain secrets or anything you don't want leaving your machine.
+
 This skill does NOT install anything — it assumes the pieces below are already set up (see Setup below). It just flips the switch.
 
 ## When to Use

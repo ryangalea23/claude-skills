@@ -41,6 +41,8 @@ Before first use:
 
 ## Legal Note (ESIGN Act, US)
 
+This is general background, not legal advice.
+
 Image-stamp signatures on flat PDFs are binding for normal commercial contracts under the US ESIGN Act 2000. Avoid them for: notarized documents, anything explicitly requiring wet-ink, real-estate closings, and Docusign-grade-audit-trail required docs (some banking/HIPAA contexts). If you're outside the US, check your own jurisdiction's e-signature rules before relying on this. When in doubt, surface the question to the user before signing.
 
 ## Workflow

@@ -44,6 +44,8 @@ Transcribe a local audio recording (mp3/m4a/wav) with OpenAI's Whisper API, then
 
 Turn text-to-speech of Claude's replies on and off. A Claude Code Stop hook reads each response aloud with `edge-tts` (free, no API key) when a marker file is present.
 
+**Privacy:** `edge-tts` is Microsoft's online service. While voice mode is on, the text of every Claude reply is sent to Microsoft to make the audio.
+
 **Needs:** `pip install edge-tts`, and `ffplay` (from ffmpeg) or another command-line audio player on PATH. Optional: `pip install pycaw` (Windows only) so the hook can detect when you're on a call and stay quiet. See the `Setup` section in `skills/voice-mode/SKILL.md` for the one-time hook registration in `settings.json`.
 
 ### sign-pdf

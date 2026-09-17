@@ -33,7 +33,7 @@ Convert a local audio recording into a structured meeting note. Single-pass: Whi
 
 ## Recording with `record-call` (optional, Windows only)
 
-`scripts/record-call.ps1` starts and stops a mic-only ffmpeg recording in the background and drops finished files straight into the recordings folder this skill reads from. It does not capture system/call audio, only your microphone — so it captures your side of a call, not the other person's, unless your setup routes both into one input device.
+`scripts/record-call.ps1` starts and stops a mic-only ffmpeg recording in the background and drops finished files straight into the recordings folder this skill reads from. There is no time limit: a recording you forget to stop keeps going until you run `record-call stop` or the disk fills, so check `record-call status` if you're not sure. It does not capture system/call audio, only your microphone — so it captures your side of a call, not the other person's, unless your setup routes both into one input device.
 
 ```powershell
 record-call start "team sync"   # -> ~/work/recordings/2026-05-21_140530_team-sync.mp3

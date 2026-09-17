@@ -151,8 +151,9 @@ switch ($Action) {
         }
         if (Test-Path $StateFile) {
             Write-Host "Guard did not respond within 12s. Force-killing."
+            # Re-check the name: if ffmpeg already exited, Windows may have reused the PID.
             $proc = Get-Process -Id $state.pid -ErrorAction SilentlyContinue
-            if ($proc) { Stop-Process -Id $state.pid -Force }
+            if ($proc -and $proc.ProcessName -eq 'ffmpeg') { Stop-Process -Id $state.pid -Force }
             Remove-Item $StateFile -Force -ErrorAction SilentlyContinue
             Remove-Item $SignalFile -Force -ErrorAction SilentlyContinue
         }
