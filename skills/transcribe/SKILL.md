@@ -6,10 +6,12 @@ description: |
   structured summary written via the `notes` skill schema in `~/work/notes/`.
 
   Default behavior: if no file given, picks the most recent recording in
-  `~/work/recordings/`.
+  `~/work/recordings/`. Pairs with the `record-call` script in this skill's
+  `scripts/` folder (Windows only).
 
   Use when asked to "transcribe this", "transcribe the recording", "summarize
-  the call", "/transcribe", "what did we say on that call".
+  the call", "/transcribe", "what did we say on that call", or after running
+  `record-call stop`.
 allowed-tools:
   - Read
   - Write
@@ -20,14 +22,33 @@ allowed-tools:
 
 # Transcribe
 
-Convert a local audio recording into a structured meeting note. Single-pass: Whisper API for the transcript, then synthesize the note inline using the `notes` skill's schema. This skill does not record audio — bring your own recording (any tool that produces an mp3/m4a/wav file works). If you want a `record-call` style helper wired into your own setup, that is a separate script you write for your own recording method and is outside the scope of this skill.
+Convert a local audio recording into a structured meeting note. Single-pass: Whisper API for the transcript, then synthesize the note inline using the `notes` skill's schema. This skill does not require any particular recording tool — bring your own recording (any tool that produces an mp3/m4a/wav file works). On Windows, `scripts/record-call.ps1` is included as an optional mic-only call recorder that pairs with it (see Recording with `record-call` below).
 
 ## Requirements
 
 - An OpenAI API key with Whisper access, available as the environment variable `OPENAI_API_KEY`. How you load that variable into your shell (a `.env` file, your OS's secret manager, etc.) is up to you — this skill just expects it to already be set when Claude Code starts, or readable from a file you point it at.
 - `curl` and `jq` (or PowerShell's JSON parsing) for calling the API and reading the response.
-- `ffmpeg` on PATH if you ever need to chunk a large file (see step 3).
+- `ffmpeg` on PATH if you ever need to chunk a large file (see step 3), or if you use `record-call` (see below).
 - The `notes` skill installed alongside this one — transcribe writes into `~/work/notes/` using its filename and frontmatter format.
+
+## Recording with `record-call` (optional, Windows only)
+
+`scripts/record-call.ps1` starts and stops a mic-only ffmpeg recording in the background and drops finished files straight into the recordings folder this skill reads from. It does not capture system/call audio, only your microphone — so it captures your side of a call, not the other person's, unless your setup routes both into one input device.
+
+```powershell
+record-call start "team sync"   # -> ~/work/recordings/2026-05-21_140530_team-sync.mp3
+record-call stop
+record-call status
+record-call list
+record-call devices             # list audio input devices ffmpeg can see
+```
+
+Install: copy `record-call.ps1`, `record-call.cmd`, and `_record-guard.ps1` (from this skill's `scripts/` folder) to a folder on your PATH, keeping all three together — `record-call.cmd` is a thin wrapper so you can type `record-call` instead of the full PowerShell invocation, and `_record-guard.ps1` is a background helper `record-call.ps1` spawns, not something you run directly.
+
+Env overrides:
+- `RECORD_CALL_DIR` — recordings folder (default `~/work/recordings`, matching this skill's default).
+- `RECORD_CALL_FFMPEG` — path to `ffmpeg.exe` if it's not on PATH.
+- `RECORD_CALL_MIC` — a substring to match your preferred input device name (run `record-call devices` to see what's available). Without it, `record-call` just uses the first device it finds — set this if you have more than one microphone.
 
 ## Inputs
 
@@ -165,7 +186,7 @@ source: recording:<absolute-path-to-mp3>
 
 ## What this skill does NOT do
 
-- No recording itself — bring your own mp3/m4a/wav from whatever tool you use to record calls.
+- No system/call-audio capture — `record-call` is mic-only, so it gets your side of a call, not the other person's. Bring your own mp3/m4a/wav from another tool if you need both sides.
 - No speaker diarization — a single-track recording only captures one side clearly unless your recording setup captures both.
 - No automatic Slack/email forwarding of summaries — output is the meeting note file, full stop.
 - No real-time transcription — strictly post-call.

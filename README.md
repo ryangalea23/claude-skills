@@ -16,7 +16,7 @@ cp -r skills/sign-pdf ~/.claude/skills/
 
 Restart Claude Code (or start a new session) so it picks up the new skills. Each skill's `SKILL.md` has a `Setup` or `Requirements` section — read that before first use, especially for `voice-mode` and `sign-pdf`, which need a one-time setup step.
 
-**Tested on:** Windows 11 with PowerShell and Git Bash. The Python scripts (`sign-pdf`, `voice-mode`) should work on macOS/Linux too, but only the Windows path has been run end to end. `notes`, `tasks`, and `transcribe` are plain markdown + Bash/curl and should be platform-neutral.
+**Tested on:** Windows 11 with PowerShell and Git Bash. The Python scripts (`sign-pdf`, `voice-mode`) should work on macOS/Linux too, but only the Windows path has been run end to end. `notes` and `tasks` are plain markdown + Bash and should be platform-neutral. `transcribe`'s Whisper upload is plain curl and platform-neutral; its optional `record-call` recording helper is PowerShell and Windows-only (mic-only capture via ffmpeg's `dshow` input, which doesn't exist outside Windows).
 
 ## Skills
 
@@ -35,6 +35,8 @@ A personal task list in one markdown file (`tasks.md`), with tags, priority, due
 ### transcribe
 
 Transcribe a local audio recording (mp3/m4a/wav) with OpenAI's Whisper API, then write a structured meeting note using the `notes` skill's format.
+
+**Needs:** an `OPENAI_API_KEY` environment variable, `curl`, `jq` (or PowerShell for JSON parsing), and `ffmpeg` if you ever need to split a large file. Includes an optional `record-call` PowerShell script (Windows only) that records your microphone in the background and drops the file where `transcribe` expects it — see `skills/transcribe/SKILL.md` for setup and usage. You don't need `record-call` to use `transcribe`; any tool that produces an mp3/m4a/wav works.
 
 **Needs:** an `OPENAI_API_KEY` environment variable, `curl`, `jq` (or PowerShell for JSON parsing), and `ffmpeg` if you ever need to split a large file. This skill does not record audio for you — bring your own recording from whatever tool you use.
 
