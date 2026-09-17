@@ -1,0 +1,25 @@
+# Secrets
+.env
+*.env
+
+# Signature images (personal, sensitive — never commit a real signature)
+signature.png
+signature.jpg
+signature.jpeg
+skills/sign-pdf/scripts/signature.*
+
+# TTS toggle marker (per-machine state, not repo content)
+skills/voice-mode/scripts/.tts-enabled
+
+# Python
+__pycache__/
+*.pyc
+
+# Logs and backups
+*.log
+*.bak
+*.bak-*
+
+# OS cruft
+.DS_Store
+Thumbs.db
